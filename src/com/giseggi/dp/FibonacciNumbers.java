@@ -47,11 +47,11 @@ public class FibonacciNumbers {
 
 //		System.out.println(FibonacciRecursive(50));
 //		System.out.println(FibonacciDPTopDown(100));
-		System.out.println(FibonacciDPBottomUp(100));
+		System.out.println(FibonacciDPBottomUp(200));
 
 		long afterTime = System.currentTimeMillis(); // 実行後
 		long secDiffTime = afterTime - beforeTime; // 時間差
-		System.out.println("Execution time(m) : " + secDiffTime);
+		System.out.println("Execution time(ms) : " + secDiffTime);
 
 	}
 }
