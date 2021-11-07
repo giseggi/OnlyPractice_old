@@ -1,7 +1,5 @@
 package com.giseggi.dp;
 
-import java.math.BigDecimal;
-
 public class FibonacciNumbers {
 
 	static final int MAX_NUM = 101;
@@ -15,6 +13,7 @@ public class FibonacciNumbers {
 		return FibonacciRecursive(num - 1) + (FibonacciRecursive(num - 2));
 	}
 
+	// Top-Down
 	static long FibonacciDPTopDown(int num) {
 		if (num == 0 || num == 1) {
 			return num;
@@ -28,6 +27,7 @@ public class FibonacciNumbers {
 
 	}
 
+	// Bottom-Up
 	static long FibonacciDPBottomUp(int num) {
 		
 		fibonacciNumbers[0] = 0;
@@ -43,15 +43,15 @@ public class FibonacciNumbers {
 
 	public static void main(String[] args) {
 
-		long beforeTime = System.currentTimeMillis(); // 코드 실행 전에 시간 받아오기
+		long beforeTime = System.currentTimeMillis(); // 実行前
 
 //		System.out.println(FibonacciRecursive(50));
 //		System.out.println(FibonacciDPTopDown(100));
 		System.out.println(FibonacciDPBottomUp(100));
 
-		long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
-		long secDiffTime = afterTime - beforeTime; // 두 시간에 차 계산
-		System.out.println("시간차이(m) : " + secDiffTime);
+		long afterTime = System.currentTimeMillis(); // 実行後
+		long secDiffTime = afterTime - beforeTime; // 時間差
+		System.out.println("Execution time(m) : " + secDiffTime);
 
 	}
 }
