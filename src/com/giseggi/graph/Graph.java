@@ -1,5 +1,7 @@
 package com.giseggi.graph;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class Graph {
@@ -17,7 +19,10 @@ public class Graph {
 	private int vertexCount;
 	
 	// DFS用のStack
-	private Stack<Integer> stack; 
+	private Stack<Integer> stack;
+	
+	//BFS用のQueue
+	private Queue<Integer> queue;
 	
 	// Graph初期化
 	public Graph() {
@@ -32,6 +37,7 @@ public class Graph {
 		}
 		
 		stack = new Stack<>();
+		queue = new LinkedList<>();
 		
 	}
 	
@@ -71,6 +77,50 @@ public class Graph {
 		
 	}
 	
+	public void BFS() {
+		// levelが増えたかどうかを判別するフラグ
+		boolean levelAddedFlg = true;
+		vertexArray[0].setVisited(true);
+		System.out.println("level: 0");
+		displayVertexValue(0);
+		// 訪問したVertexの数
+		int displayedCount = 1;
+		
+		queue.add(0);
+		int level = 1;
+		while(!queue.isEmpty()) {
+			
+			// 全てのVertexを訪問した場合はlevelを表示させない
+			if(levelAddedFlg && displayedCount != vertexCount) {
+				System.out.println("level: " + level);
+				levelAddedFlg = false;
+			}
+			int index = queue.remove();			
+			while(getAdjacentUnvisitedVertex(index) != -1) {
+				int index2 = getAdjacentUnvisitedVertex(index);
+				vertexArray[index2].setVisited(true);
+				
+				// 隣接Vertexを全て訪問した場合、levelを増す。
+				if(getAdjacentUnvisitedVertex(index) == -1) {
+					level++;
+					levelAddedFlg = true;					
+				}
+				
+				displayVertexValue(index2);
+				displayedCount++;
+				queue.add(index2);
+				
+			}
+						
+		}
+		
+		for(int i = 0; i < vertexCount; i++) {
+			vertexArray[i].setVisited(false);
+		}
+			
+	}
+	
+	// 訪問してないindexの隣接Vertexを返却、ない場合は-1を返却する。
 	public int getAdjacentUnvisitedVertex(int index) {
 		for(int i = 0; i < vertexCount; i++) {
 			if(adjacencyMatrix[index][i] == 1 && !vertexArray[i].isVisited()) {
@@ -113,11 +163,23 @@ public class Graph {
 		graph.addEdge(4, 5);
 		graph.addEdge(4, 6);
 		
-		// DFS結果は
+		// DFS
 		// B-C-A-F-G-D-E-H
 		graph.DFS();
 		
-		
+		System.out.println();
+		// BFS
+		// level: 0
+		// B
+		// level: 1
+		// C
+		// level: 2
+		// A H
+		// level: 3
+		// F G
+		// level: 4
+		// D E
+		graph.BFS();
 		
 	}
 	
