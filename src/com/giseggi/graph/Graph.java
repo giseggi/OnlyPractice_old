@@ -80,4 +80,46 @@ public class Graph {
 		return -1;
 	}
 	
+	public static void main(String[] args) {
+		
+		// graph初期化
+		Graph graph = new Graph();
+		
+		
+		// graph構成は以下
+        //		B
+        //		│
+        //		C─H
+        //		│ │
+        //		A─G─E
+        //		│ │
+        //		F D
+		
+		graph.addVertex("B");
+		graph.addVertex("C");
+		graph.addVertex("A");
+		graph.addVertex("F");
+		graph.addVertex("G");
+		graph.addVertex("D");
+		graph.addVertex("E");
+		graph.addVertex("H");
+		
+		graph.addEdge(0, 1);
+		graph.addEdge(1, 2);
+		graph.addEdge(1, 7);
+		graph.addEdge(2, 3);
+		graph.addEdge(2, 4);
+		graph.addEdge(4, 7);
+		graph.addEdge(4, 5);
+		graph.addEdge(4, 6);
+		
+		// DFS結果は
+		// B-C-A-F-G-D-E-H
+		graph.DFS();
+		
+		
+		
+	}
+	
 }
+
