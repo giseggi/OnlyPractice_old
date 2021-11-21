@@ -41,6 +41,7 @@ public class Problem1 {
 				} else {
 					return -1;
 				}
+				
 			} else {
 				if (solution(N - 5) != -1) {
 					return solutions[N] = solution(N - 5) + 1;
