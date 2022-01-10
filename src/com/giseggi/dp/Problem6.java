@@ -1,9 +1,3 @@
-package com.giseggi.dp;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 /*
 「問題」
 サングンとソンヨンが他の人たちが会話を聞くのを防ぐために対話をお互い暗号化することにした。 そこで、次のような話をした。
@@ -33,6 +27,12 @@ EX2)
 1111111111	89
 
 */
+package com.giseggi.dp;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class Problem6 {
 	
 	static int solution(String code) {
