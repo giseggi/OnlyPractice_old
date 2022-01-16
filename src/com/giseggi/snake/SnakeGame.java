@@ -4,17 +4,20 @@ import java.awt.*;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import java.awt.event.*;
 import java.util.List;
+import java.util.Random;
 import java.util.ArrayList;
 
 public class SnakeGame extends JFrame {
 
-	JLabel[][] jlArray = new JLabel[31][31];
-	JPanel panel = new JPanel();
-	Snake snake = new Snake();
+	private JLabel[][] jlArray = new JLabel[30][30];
+	private JPanel panel = new JPanel();
+	private Snake snake = new Snake();
+	private Cell food = new Cell();
 	boolean gameOver;
 
 	public SnakeGame() {		
@@ -38,19 +41,19 @@ public class SnakeGame extends JFrame {
 			}
 		}
 		
-		snake.setLength(10);
+		snake.setLength(1);
 		List<Cell> firstBody = new ArrayList<Cell>();
-		for(int i = 0; i < snake.getLength(); i++) {
-			Cell cell = new Cell();
-			cell.setX(15 - i);
-			cell.setY(15);
-			firstBody.add(cell);
-		}
+		Cell cell = new Cell();
+		cell.setX(15);
+		cell.setY(15);
+		firstBody.add(cell);
+
 		snake.setDirection(Direction.NONE);
 		snake.setBody(firstBody);
 		displaySnake(snake);
-								
-		setSize(700, 700);
+		createFood();					
+		
+		setSize(800, 800);
 		setVisible(true);	
 		
 		panel.setFocusable(true);
@@ -63,36 +66,77 @@ public class SnakeGame extends JFrame {
         public void keyTyped(KeyEvent e) {
         }
 
-        @Override
-        public void keyPressed(KeyEvent e) {
-        	int keyCode =e.getKeyCode();
-            
-            switch(keyCode){
-                case KeyEvent.VK_UP:
-                	if(snake.getDirection() != Direction.DOWN) {
-                		moveSnake(Direction.UP, snake);
-                	}                	
-                    break;
-                case KeyEvent.VK_DOWN:
-                	if(snake.getDirection() != Direction.UP) {
-                		moveSnake(Direction.DOWN, snake);
-                	}                	
-                    break;
-                case KeyEvent.VK_RIGHT:
-                	if(snake.getDirection() != Direction.LEFT) {
-                		moveSnake(Direction.RIGHT, snake); 
-                	}                	
-                    break;
-                case KeyEvent.VK_LEFT:
-                	if(snake.getDirection() != Direction.RIGHT) {
-                		moveSnake(Direction.LEFT, snake);
-                	}              	
-                    break;
-            }
-            
-            displaySnake(snake);
-        }
-        
+		@Override
+		public void keyPressed(KeyEvent e) {
+
+			int keyCode = e.getKeyCode();
+
+			switch (keyCode) {
+				case KeyEvent.VK_UP:
+					if(snake.getBody().get(0).getX() == 0) {
+						gameOver = true;
+					}
+					
+					if(snake.getBody().size() == 1) {
+						moveSnake(Direction.UP, snake);
+					} else {
+						if (snake.getDirection() != Direction.DOWN) {
+							moveSnake(Direction.UP, snake);
+						}
+					}					
+					break;
+					
+				case KeyEvent.VK_DOWN:
+					if(snake.getBody().get(0).getX() == 29) {
+						gameOver = true;
+					}
+					
+					if(snake.getBody().size() == 1) {
+						moveSnake(Direction.DOWN, snake);
+					} else {
+						if (snake.getDirection() != Direction.UP) {
+							moveSnake(Direction.DOWN, snake);
+						}
+					}					
+					break;
+					
+				case KeyEvent.VK_RIGHT:
+					if(snake.getBody().get(0).getY() == 29) {
+						gameOver = true;
+					}
+					if(snake.getBody().size() == 1) {
+						moveSnake(Direction.RIGHT, snake);
+					} else {
+						if (snake.getDirection() != Direction.LEFT) {
+							moveSnake(Direction.RIGHT, snake);
+						}
+					}									
+					break;
+					
+				case KeyEvent.VK_LEFT:
+					if(snake.getBody().get(0).getY() == 0) {
+						gameOver = true;
+					}
+					
+					if(snake.getBody().size() == 1) {
+						moveSnake(Direction.LEFT, snake);
+					} else {
+						if (snake.getDirection() != Direction.RIGHT) {
+							moveSnake(Direction.LEFT, snake);
+						}
+					}					
+					break;
+			}
+			
+			if(gameOver) {
+				JOptionPane.showMessageDialog(null, "Game Over!");
+				panel.setFocusable(false);
+				return;
+			}
+			
+			displaySnake(snake);
+						
+		}
 
         @Override
         public void keyReleased(KeyEvent e) {
@@ -108,64 +152,61 @@ public class SnakeGame extends JFrame {
 		}	
 	}
 	
-	public void moveSnake(Direction direction, Snake snake) {
+	public void moveSnake(Direction direction, Snake snake) throws ArrayIndexOutOfBoundsException {
 		List<Cell> body = snake.getBody();
 		
-		int newHeadX = snake.getBody().get(0).getX();
-        int newHeadY = snake.getBody().get(0).getY();
+		int newHeadX = 0;
+		int newHeadY = 0;
+		int headX = snake.getBody().get(0).getX();
+        int headY = snake.getBody().get(0).getY();
         
-        switch(direction) {
-        	case UP:
-        		if(isBody(newHeadX - 1, newHeadY)) {
-                	return;
-                }
-        		break;
-        		
-        	case DOWN:
-        		if(isBody(newHeadX + 1, newHeadY)) {
-        			return;
-                }
-        		break;
-        		
-        	case LEFT:
-        		if(isBody(newHeadX, newHeadY - 1)) {
-        			return;
-                }
-        		break;
-        		
-        	case RIGHT:
-        		if(isBody(newHeadX, newHeadY + 1)) {
-        			return;
-                }
-        		break;
-        }
-		jlArray[snake.getBody().get(snake.getBody().size() - 1).getX()][snake.getBody().get(snake.getBody().size() - 1).getY()].setBackground(Color.BLACK);
-		for(int i = body.size() - 1; i > 0; i--) {
-			body.get(i).setX(body.get(i - 1).getX());
-			body.get(i).setY(body.get(i - 1).getY());
-		}
 		switch(direction) {
 			case UP:
-				body.get(0).setX(body.get(0).getX() - 1);
-				body.get(0).setY(body.get(0).getY());
+				newHeadX = headX - 1;
+				newHeadY = headY;			
 				break;
-			
+		
 			case DOWN:
-				body.get(0).setX(body.get(0).getX() + 1);
-				body.get(0).setY(body.get(0).getY());
+				newHeadX = headX + 1;
+				newHeadY = headY;
 				break;
-			
+		
 			case LEFT:
-				body.get(0).setX(body.get(0).getX());
-				body.get(0).setY(body.get(0).getY() - 1);
+				newHeadX = headX;
+				newHeadY = headY - 1;
 				break;
-			
+		
 			case RIGHT:
-				body.get(0).setX(body.get(0).getX());
-				body.get(0).setY(body.get(0).getY() + 1);
-				break;	
-				
+				newHeadX = headX;
+				newHeadY = headY + 1;
+				break;				
 		}
+		if(isBody(newHeadX, newHeadY)) {
+        	gameOver = true;
+			return;
+        }
+		
+		if(newHeadX == food.getX() && newHeadY == food.getY()) {
+			Cell cell = new Cell();	
+			cell.setX(newHeadX);
+			cell.setY(newHeadY);
+			snake.getBody().add(0, cell);
+			
+			createFood();
+						
+		} else {
+			if(!gameOver) {
+				jlArray[snake.getBody().get(snake.getBody().size() - 1).getX()][snake.getBody().get(snake.getBody().size() - 1).getY()].setBackground(Color.BLACK);
+			}
+			
+			for(int i = body.size() - 1; i > 0; i--) {
+				body.get(i).setX(body.get(i - 1).getX());
+				body.get(i).setY(body.get(i - 1).getY());
+			}
+			body.get(0).setX(newHeadX);
+			body.get(0).setY(newHeadY);
+		}
+		       
 		snake.setDirection(direction);
 	}
 	
@@ -183,6 +224,29 @@ public class SnakeGame extends JFrame {
 		}
 		
 		return false;
+		
+	}
+	
+	public void createFood() {
+		
+		Random random = new Random();
+		random.setSeed(System.currentTimeMillis());
+		
+		int foodX = random.nextInt(30);
+		int foodY = random.nextInt(30);
+		
+		int headX = snake.getBody().get(0).getX();
+		int headY = snake.getBody().get(0).getY();
+		
+		while(isBody(foodX, foodY) || (foodX == headX && foodY == headY)) {
+			foodX = random.nextInt(30);
+			foodY = random.nextInt(30);
+		}
+		
+		food.setX(foodX);
+		food.setY(foodY);
+		
+		jlArray[food.getX()][food.getY()].setBackground(Color.GREEN);
 		
 	}
 	
