@@ -20,7 +20,7 @@ public class SnakeGame extends JFrame {
 	private Cell food = new Cell();
 	boolean gameOver;
 
-	public SnakeGame() {		
+	public SnakeGame() throws InterruptedException {		
 		
 		setTitle("SnakeGame");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,6 +58,18 @@ public class SnakeGame extends JFrame {
 		
 		panel.setFocusable(true);
 		
+		while(!gameOver) {
+			moveSnake(snake.getDirection(), snake);
+			if(gameOver) {
+				JOptionPane.showMessageDialog(null, "Game Over!");
+				panel.setFocusable(false);
+				return;
+			}
+			
+			displaySnake(snake);
+			Thread.sleep(150);
+		}
+		
 									
 	}
 	
@@ -73,69 +85,46 @@ public class SnakeGame extends JFrame {
 
 			switch (keyCode) {
 				case KeyEvent.VK_UP:
-					if(snake.getBody().get(0).getX() == 0) {
-						gameOver = true;
-					}
-					
 					if(snake.getBody().size() == 1) {
-						moveSnake(Direction.UP, snake);
+						snake.setDirection(Direction.UP);
 					} else {
 						if (snake.getDirection() != Direction.DOWN) {
-							moveSnake(Direction.UP, snake);
+							snake.setDirection(Direction.UP);
 						}
 					}					
 					break;
 					
 				case KeyEvent.VK_DOWN:
-					if(snake.getBody().get(0).getX() == 29) {
-						gameOver = true;
-					}
-					
 					if(snake.getBody().size() == 1) {
-						moveSnake(Direction.DOWN, snake);
+						snake.setDirection(Direction.DOWN);
 					} else {
 						if (snake.getDirection() != Direction.UP) {
-							moveSnake(Direction.DOWN, snake);
+							snake.setDirection(Direction.DOWN);
 						}
 					}					
 					break;
 					
 				case KeyEvent.VK_RIGHT:
-					if(snake.getBody().get(0).getY() == 29) {
-						gameOver = true;
-					}
 					if(snake.getBody().size() == 1) {
-						moveSnake(Direction.RIGHT, snake);
+						snake.setDirection(Direction.RIGHT);
 					} else {
 						if (snake.getDirection() != Direction.LEFT) {
-							moveSnake(Direction.RIGHT, snake);
+							snake.setDirection(Direction.RIGHT);
 						}
 					}									
 					break;
 					
 				case KeyEvent.VK_LEFT:
-					if(snake.getBody().get(0).getY() == 0) {
-						gameOver = true;
-					}
-					
 					if(snake.getBody().size() == 1) {
-						moveSnake(Direction.LEFT, snake);
+						snake.setDirection(Direction.LEFT);
 					} else {
 						if (snake.getDirection() != Direction.RIGHT) {
-							moveSnake(Direction.LEFT, snake);
+							snake.setDirection(Direction.LEFT);
 						}
 					}					
 					break;
 			}
-			
-			if(gameOver) {
-				JOptionPane.showMessageDialog(null, "Game Over!");
-				panel.setFocusable(false);
-				return;
-			}
-			
-			displaySnake(snake);
-						
+									
 		}
 
         @Override
@@ -162,21 +151,37 @@ public class SnakeGame extends JFrame {
         
 		switch(direction) {
 			case UP:
+				if(snake.getBody().get(0).getX() == 0) {
+					gameOver = true;
+					return;
+				}
 				newHeadX = headX - 1;
 				newHeadY = headY;			
 				break;
 		
 			case DOWN:
+				if(snake.getBody().get(0).getX() == 29) {
+					gameOver = true;
+					return;
+				}
 				newHeadX = headX + 1;
 				newHeadY = headY;
 				break;
 		
 			case LEFT:
+				if(snake.getBody().get(0).getY() == 0) {
+					gameOver = true;
+					return;
+				}
 				newHeadX = headX;
 				newHeadY = headY - 1;
 				break;
 		
 			case RIGHT:
+				if(snake.getBody().get(0).getY() == 29) {
+					gameOver = true;
+					return;
+				}
 				newHeadX = headX;
 				newHeadY = headY + 1;
 				break;				
@@ -250,7 +255,7 @@ public class SnakeGame extends JFrame {
 		
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		
 		new SnakeGame();
 
