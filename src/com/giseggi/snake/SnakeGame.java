@@ -2,10 +2,12 @@ package com.giseggi.snake;
 
 import java.awt.*;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import java.awt.event.*;
 import java.util.List;
@@ -15,22 +17,30 @@ import java.util.ArrayList;
 public class SnakeGame extends JFrame {
 
 	private JLabel[][] jlArray = new JLabel[30][30];
+	private JLabel score = new JLabel();
 	private JPanel panel = new JPanel();
 	private Snake snake = new Snake();
 	private Cell food = new Cell();
 	boolean gameOver;
 
 	public SnakeGame() throws InterruptedException {		
-		
+			
+		JPanel scoreBoard = new JPanel();
+		scoreBoard.setLayout(new BoxLayout(scoreBoard, BoxLayout.X_AXIS));
+		scoreBoard.add(new JLabel("score : "));
+		scoreBoard.add(score);
+		score.setText(Integer.toString(snake.getBody().size() * 10));
 		setTitle("SnakeGame");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setContentPane(panel);
 		setLocation(500, 200);
+		
+		getContentPane().add(panel, "Center");
+		getContentPane().add(scoreBoard, "North");
 		
 		gameOver = false;
 		
 		panel.setLayout(new GridLayout(30, 30, 1, 1));	
-		panel.addKeyListener(new SnakeKeyListener());	
+		panel.addKeyListener(new SnakeKeyListener());
 		
 		for(int i = 0; i < 30; i ++) {
 			for(int j = 0; j < 30; j++) {
@@ -49,15 +59,17 @@ public class SnakeGame extends JFrame {
 		firstBody.add(cell);
 
 		snake.setDirection(Direction.NONE);
-		snake.setBody(firstBody);
+		snake.setBody(firstBody);			
+					
+		panel.setFocusable(true);
+		
+		setVisible(true);
+		
 		displaySnake(snake);
 		createFood();					
 		
 		setSize(800, 800);
-		setVisible(true);	
-		
-		panel.setFocusable(true);
-		
+			
 		while(!gameOver) {
 			moveSnake(snake.getDirection(), snake);
 			if(gameOver) {
@@ -67,10 +79,9 @@ public class SnakeGame extends JFrame {
 			}
 			
 			displaySnake(snake);
-			Thread.sleep(150);
+			Thread.sleep(100);
 		}
-		
-									
+														
 	}
 	
 	class SnakeKeyListener implements KeyListener{
@@ -138,7 +149,8 @@ public class SnakeGame extends JFrame {
 		
 		for(Cell cell : body) {
 			jlArray[cell.getX()][cell.getY()].setBackground(Color.RED);
-		}	
+		}
+		score.setText(Integer.toString((snake.getBody().size() - 1) * 10));
 	}
 	
 	public void moveSnake(Direction direction, Snake snake) throws ArrayIndexOutOfBoundsException {
