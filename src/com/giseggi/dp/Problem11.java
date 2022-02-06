@@ -1,0 +1,1 @@
+package com.giseggi.dp;import java.util.*;public class Problem11{public static void main(String[] args){int[]A=new int[46];int[]B=new int[46];A[0]=1;B[0]=0;for(int i=1;i<46;i++) {A[i]=B[i-1];B[i]=A[i-1]+B[i-1];}Scanner sc=new Scanner(System.in);int n=sc.nextInt();System.out.println(A[n]+" "+B[n]);}}

@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import java.awt.event.*;
 import java.util.List;
@@ -73,7 +72,7 @@ public class SnakeGame extends JFrame {
 		while(!gameOver) {
 			moveSnake(snake.getDirection(), snake);
 			if(gameOver) {
-				JOptionPane.showMessageDialog(null, "Game Over!");
+				JOptionPane.showMessageDialog(null, "Game Over!\r\nScore: " + Integer.toString((snake.getBody().size() - 1) * 10));
 				panel.setFocusable(false);
 				return;
 			}
