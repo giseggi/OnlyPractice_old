@@ -52,6 +52,5 @@ public class FibonacciNumbers {
 		long afterTime = System.currentTimeMillis(); // 実行後
 		long secDiffTime = afterTime - beforeTime; // 時間差
 		System.out.println("Execution time(ms) : " + secDiffTime);
-
 	}
 }
